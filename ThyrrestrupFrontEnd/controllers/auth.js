@@ -1,6 +1,8 @@
 const mssql = require("mssql");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+ 
+
 
 var request = new mssql.Request();
 
@@ -26,18 +28,23 @@ mssql.connect(config, function (err) {
                     message: 'Please provide an email and password'
                 })
             }
-            request.query("Select * FROM Persons WHERE email =('"+email+"')", async (error, results) => {
-console.log(results)
 
-                if(!results || !(await bcrypt.compare(password, results[0].password) ) ){
+            const result = request.query("Select * FROM Persons WHERE email =('"+email+"')", async (error, results) => {
+               // var arr = new Array();
+                //results.recordset = arr;
+                //console.log(results.recordset)
 
+              
+
+                if(!results || !(await bcrypt.compare(password, results.recordset[0].password) ) ){
+                    console.log(results)
                     res.status(401).render('login', {
                         message: 'Email or Password is incorrect'
                     })
                 } else {
-                    const id = results[0].id;
+                    const id = results.recordset[0].id;
                     console.log(id)
-                    const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+                    const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
                         expiresIn: process.env.JWT_EXPIRES_IN
                     });
 
