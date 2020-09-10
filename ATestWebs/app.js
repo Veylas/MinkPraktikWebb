@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require('path');
-const mysql = require("mysql");
+const mssql = require("mssql");
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
@@ -8,9 +8,9 @@ dotenv.config({ path: './.env'})
 
 const app = express();
 
-const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    //port: 3000,
+var config = ({
+    server: process.env.DATABASE_HOST,
+    //port: 1433,
     database: process.env.DATABASE,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_password
@@ -24,6 +24,10 @@ const db = mysql.createConnection({
 
 });
 
+/*mssql.connect(config, function (err) {
+    
+    if (err) console.log(err);
+})*/
 const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
@@ -35,13 +39,14 @@ console.log(__dirname);
 app.set('view engine', 'hbs');
 
 
-db.connect( (error) => {
+mssql.connect(config, function (error) {
     if(error) {
         console.log(error)
     } else {
-        console.log("MYSQL Connected...")
+        console.log("MsSQL Connected...")
     }
 })
+
 
 //Define Routes
 app.use('/', require('./routes/pages'));
