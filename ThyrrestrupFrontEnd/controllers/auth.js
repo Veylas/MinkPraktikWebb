@@ -35,8 +35,8 @@ mssql.connect(config, function (err) {
                 //console.log(results.recordset);
 
                       
-                if(!(results.recordset.email) || !(await bcrypt.compare(password, results.recordset[0].password) ) ){
-                    console.log("If statement passowrd");
+                if(!results.recordset[0] || !(await bcrypt.compare(password, (results.recordset[0].password)) ) ){
+                    //console.log("If statement passowrd");
                     //console.log(results.recordset[0].password)
                     res.status(401).render('login', {
                         message: 'Email or Password is incorrect'
