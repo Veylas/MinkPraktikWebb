@@ -29,24 +29,27 @@ mssql.connect(config, function (err) {
                 })
             }
 
-            const result = request.query("Select * FROM Persons WHERE email =('"+email+"')", async (error, results) => {
-               // var arr = new Array();
-                //results.recordset = arr;
-                //console.log(results.recordset)
+            request.query("Select * FROM Persons WHERE email =('"+email+"')", async (error, results) => {
+                //console.log("hello");
+                //console.log(results.recordset.password);
+                //console.log(results.recordset);
 
-              
-
-                if(!results || !(await bcrypt.compare(password, results.recordset[0].password) ) ){
-                    console.log(results)
+                      
+                if(!(results.recordset.email) || !(await bcrypt.compare(password, results.recordset[0].password) ) ){
+                    console.log("If statement passowrd");
+                    //console.log(results.recordset[0].password)
                     res.status(401).render('login', {
                         message: 'Email or Password is incorrect'
                     })
+                    
                 } else {
-                    const id = results.recordset[0].id;
-                    console.log(id)
+                    var id = results.recordset[0].id;
+                    //console.log(id)
+                    console.log("else statement password");
+                    console.log(results.recordset[0].password)
                     const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
                         expiresIn: process.env.JWT_EXPIRES_IN
-                    });
+                    })
 
                     console.log("The token is:" + token);
 
