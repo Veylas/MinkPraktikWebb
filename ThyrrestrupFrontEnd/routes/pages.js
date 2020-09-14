@@ -18,5 +18,12 @@ router.get('/contact', (req, res) => {
     res.render('contact');
 });
 
+router.get('/fleet', (req, res) => {
+    res.render('fleet');
+});
+
+router.get('/vehicle', (req, res) => {
+    res.render('vehicle');
+});
 
 module.exports = router;
