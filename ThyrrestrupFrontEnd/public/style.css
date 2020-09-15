@@ -94,3 +94,8 @@ div.content {
   flex-direction: column;
   text-indent: 10px;
 }
+
+.pLink {
+  display: flex;
+flex-direction: column;
+}
