@@ -21,6 +21,7 @@ mssql.connect(config, function (err) {
 })
 
     exports.login = async (req, res) => {
+       // res.send('Hellow')
         try{
             const {email, password} = req.body;
             if( !email || !password ) {
@@ -28,6 +29,7 @@ mssql.connect(config, function (err) {
                     message: 'Please provide an email and password'
                 })
             }
+            
 
             request.query("Select * FROM Persons WHERE email =('"+email+"')", async (error, results) => {
                 //console.log("hello");
@@ -95,14 +97,31 @@ mssql.connect(config, function (err) {
 
     //"INSERT INTO Persons (surName, email, password) VALUES ('"+email+"'+'"+name+"'+'"hashedPassword"')"
 
-
     request.query("INSERT INTO Persons (email, surName, password) VALUES ('"+email+"',+'"+name+"',+'"+hashedPassword+"')", (error, results) =>{
         if(error){
             console.log(error);
         } else {
-            return res.render('register', {
+            return res.json('register', {
                 message: 'User registered'
         });
     }
  })
+ exports.fleet = async (req, res) => {
+    request.query("select * from Vehicles", (error, rows, fields) =>{
+        if(!err)
+        //console.log(rows);
+        console.log(rows);
+        else 
+        console.log(err);
+    });
 }
+    return res.render('homePage', {
+        
+       message: 'Welcome'
+});
+
+
+
+
+ }
+
