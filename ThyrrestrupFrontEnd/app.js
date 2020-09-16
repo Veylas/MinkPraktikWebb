@@ -37,7 +37,11 @@ app.use(express.json());
 app.use(cookieParser());
 
 console.log(__dirname);
+
+//app.set('view engine', 'pug');
 app.set('view engine', 'hbs');
+
+//app.set('view engine', 'pug');
 
 
 
