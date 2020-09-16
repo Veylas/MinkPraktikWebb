@@ -101,27 +101,31 @@ mssql.connect(config, function (err) {
         if(error){
             console.log(error);
         } else {
-            return res.json('register', {
+            return res.render('register', {
                 message: 'User registered'
         });
     }
  })
+ }
+
  exports.fleet = async (req, res) => {
-    request.query("select * from Vehicles", (error, rows, fields) =>{
+    request.query("select * from Vehicles", (error, result) =>{
         if(!err)
         //console.log(rows);
-        console.log(rows);
-        else 
+        for(i = 0; i< result.recordset.length; i++){
+            console.log(result.recordset[i].type)
+            console.log(result.recordset[i].vehicleID)
+            console.log(result.recordset[i].powerBILink)
+            console.log(result.recordset[i].personID)
+
+    } else {
         console.log(err);
-    });
 }
-    return res.render('homePage', {
+    });
+    return res.render('index', {
         
-       message: 'Welcome'
-});
+        message: 'Welcome'
+ });
+}
 
-
-
-
- }
 

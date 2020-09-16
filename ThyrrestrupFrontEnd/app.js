@@ -3,6 +3,7 @@ const path = require('path');
 const mssql = require("mssql");
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+var bodyParser = require("body-parser"); 
 
 dotenv.config({ path: './.env'})
 
@@ -37,6 +38,8 @@ app.use(cookieParser());
 
 console.log(__dirname);
 app.set('view engine', 'hbs');
+
+
 
 
 mssql.connect(config, function (error) {
