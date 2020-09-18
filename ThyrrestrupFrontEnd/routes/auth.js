@@ -9,4 +9,6 @@ router.post('/login', authController.login);
 
 router.post('/fleet', function (req, res) {authController.fleet});
 
+router.post('/vehicle', authController.login);
+
 module.exports = router;

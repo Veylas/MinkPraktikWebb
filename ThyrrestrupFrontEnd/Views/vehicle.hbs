@@ -18,9 +18,9 @@
     <div class="content">
   <a href="#" class="list-group-item list-group-item-action active">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="headline">Min flåde</h5>
+      <h5 class="headline">Mit køretøj</h5>
     </div>
-    <p class="sub-title">Oversigt over dine maskiner.</p>
+    <p class="sub-title">Oversigt.</p>
   </a>
   <a href="#">
     <div class="d-flex w-100 justify-content-between">
@@ -28,11 +28,53 @@
 </div>
     <iframe class="pLink" width="1065" height="654" src="https://app.powerbi.com/view?r=eyJrIjoiYjI0ODg5YTEtODcxYS00NWNhLWE5YzMtNWJiYTVhZGFiYWRkIiwidCI6IjViMTlmZWQ2LTZmMzgtNDk3Yy04MzVmLTgzMGRkMmEyZjI5ZiIsImMiOjl9&pageName=ReportSection" frameborder="0" allowFullScreen="true" ></iframe>
 </body>
-<ul class="list-group">
-  <li class="list-group-item disabled">sidste hydraulik servicecheck: 568 timer siden</li>
-  <li class="list-group-item">sidste motor servicecheck: 38 timer siden</li>
-  <li class="list-group-item">Morbi leo risus</li>
-  <li class="list-group-item">Porta ac consectetur ac</li>
-  <li class="list-group-item">Vestibulum at eros</li>
-</ul>
+<div style="width:300px;height:350px;line-height:3em;overflow:scroll;padding:5px;background-color:#FCFADD;color:#714D03;scrollbar-base-color:#DEBB07;">
+<div id= "box"></div>
+<script>
+  var rows = [{
+    VehicleID: "Alarm meddelelse",
+    Type: "Tidspunkt",
+}, {
+    VehicleID: "lortet brænder",
+    Type: " 12:38 18-09-2020",
+}];
+
+var html = "<table border='1|1'>";
+for (var i = 0; i < rows.length; i++) {
+    html+="<tr>";
+    html+="<td>"+rows[i].VehicleID+"</td>";
+    html+="<td>"+rows[i].Type+"</td>";
+    html+="</tr>";
+}
+html+="</table>";
+document.getElementById("box").innerHTML = html;
+</script> 
+</div>
+<div id= "box1"></div>
+<script>
+  var rows = [{
+    VehicleID: "VehicleID",
+    Type: "Type",
+    PowerBILink: "PowerBILink",
+    PersonID: "PersonID"
+}, {
+    VehicleID: "328923",
+    Type: "fodervogn",
+    PowerBILink: "www.PowerBILink.dk",
+    PersonID: "666"
+}];
+
+var html = "<table border='1|1'>";
+for (var i = 0; i < rows.length; i++) {
+    html+="<tr>";
+    html+="<td>"+rows[i].VehicleID+"</td>";
+    html+="<td>"+rows[i].Type+"</td>";
+    html+="<td>"+rows[i].PowerBILink+"</td>";
+    html+="<td>"+rows[i].PersonID+"</td>";
+    html+="</tr>";
+}
+html+="</table>";
+document.getElementById("box1").innerHTML = html;
+</script>
+
 </html>

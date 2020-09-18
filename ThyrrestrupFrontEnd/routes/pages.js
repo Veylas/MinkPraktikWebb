@@ -33,7 +33,7 @@ router.get('/fleet', (req, res) => {
 var request = new mssql.Request();
 
 
-router.get("/vehicles", (req, res)=>{
+router.get("/fleet", (req, res)=>{
 request.query("select * from Vehicles", (err, result) =>{
     if(err){
     console.log("failed to query for vehicles: " + err)
@@ -72,9 +72,9 @@ mssql.connect(config, function (err) {
 /*router.get('/fleet', function (req, res) => {
     res.send('fleet'/*, {vehicle: vehicle);
 });*/
-/*
+
 router.get('/vehicle', (req, res) => {
     res.render('vehicle');
-});*/
+});
 
 module.exports = router;
