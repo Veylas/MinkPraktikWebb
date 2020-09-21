@@ -25,62 +25,25 @@
     </div>
     <p class="sub-title">Oversigt over dine maskiner.</p>
   </a>
+
+  {{#each vehicleList}}
   <a href="#" class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="machineNr">Maskin nr: #000024u81453</h5>
     </div>
     <div>
     <img src="https://cdn.lfmedia.dk/CMSContent/Media/PageContent/Max/22784.jpg" class="card-img-top" style="width: 175px; height: 100px; float: left;" alt="...">
-    <p class="mb-1">Type: fodervogn</p>
-    <p class="mb-1">Timer siden sidste servicecheck: </p>
-    <p class="mb-1">Sidst aktiv: </p>
-    <p class="mb-1">Antal maskin timer: </p>
+    <p class="mb-1">Type: {{type}}</p>
+    <p class="mb-1">Timer siden sidste servicecheck: {{personID}}</p>
+    <p class="mb-1">Sidst aktiv: {{powerBILink}}</p>
+    <p class="mb-1">Antal maskin timer: {{vehicleID}}</p>
     </div>
   </a>
- <a href="#" class="list-group-item list-group-item-action">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="machineNr">Maskin nr: #000024u81453</h5>
-    </div>
-    <div>
-    <img src="https://cdn.lfmedia.dk/CMSContent/Media/PageContent/Max/22784.jpg" class="card-img-top" style="width: 175px; height: 100px; float: left;" alt="...">
-    <p class="mb-1">Type: fodervogn</p>
-    <p class="mb-1">Timer siden sidste servicecheck: </p>
-    <p class="mb-1">Sidst aktiv: </p>
-    <p class="mb-1">Antal maskin timer: </p>
-    </div>
-  </a>
-  <a href="#" class="list-group-item list-group-item-action">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="machineNr">Maskin nr: #000024u81453</h5>
-    </div>
-    <div>
-    <img src="https://cdn.lfmedia.dk/CMSContent/Media/PageContent/Max/22784.jpg" class="card-img-top" style="width: 175px; height: 100px; float: left;" alt="...">
-    <p class="mb-1">Type: fodervogn</p>
-    <p class="mb-1">Timer siden sidste servicecheck: </p>
-    <p class="mb-1">Sidst aktiv: </p>
-    <p class="mb-1">Antal maskin timer: </p>
-    </div>
-  </a>
+    {{/each}}
+
+
+
 </div>
-
-<head>
-    <title>Vehicle List</title>
-</head>
-
-    <table>
-        {{#each vehicleList}}
-
-                <tr>
-                    <td>{{personID}}
-                    </td>
-                    <td><a href='/fleet/{{personID}}'>{{type}}</a></td>
-                    <td>{{powerBILink}}</td>
-                    <td>{{vehicleID}}</td>
-                </tr> 
-
-         {{/each}}
-    </table>
-
 
 
 </div>
