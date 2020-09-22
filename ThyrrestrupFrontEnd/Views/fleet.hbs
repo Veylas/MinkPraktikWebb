@@ -29,14 +29,14 @@
   {{#each vehicleList}}
   <a href="#" class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="machineNr">Maskin nr: #000024u81453</h5>
+      <h5 class="machineNr: ">{{vehicleID}}</h5>
     </div>
     <div>
     <img src="https://cdn.lfmedia.dk/CMSContent/Media/PageContent/Max/22784.jpg" class="card-img-top" style="width: 175px; height: 100px; float: left;" alt="...">
     <p class="mb-1">Type: {{type}}</p>
-    <p class="mb-1">Timer siden sidste servicecheck: {{personID}}</p>
-    <p class="mb-1">Sidst aktiv: {{powerBILink}}</p>
-    <p class="mb-1">Antal maskin timer: {{vehicleID}}</p>
+    <p class="mb-1">Timer siden sidste servicecheck: {{timeSinceMotService}}</p>
+    <p class="mb-1">Sidst aktiv: {{vehicle}}</p>
+    <p class="mb-1">Antal maskin timer: {{personID}}</p>
     </div>
   </a>
     {{/each}}

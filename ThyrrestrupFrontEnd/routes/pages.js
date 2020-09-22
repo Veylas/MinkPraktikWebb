@@ -28,28 +28,45 @@ router.get('/contact', (req, res) => {
 var request = new mssql.Request();
 
 router.get("/fleet", (req, res)=>{
-request.query("select * from Vehicles", (err, result) =>{
     var vehicleList = [];
+    
+    request.query("SELECT vehicleID, max(timeSinceMotService) timeSinceMotService FROM VehicleDatas group by vehicleID", (err, bongo) =>{
+ if (err) {
+    console.log("failed to query for vehicles: " + err)
+    res.sendStatus(500)
+    return
+ }
+
+ //var pong = bong.recordset
+
+
+request.query("select * from Vehicles", (err, result) =>{
     if(err){
     console.log("failed to query for vehicles: " + err)
     res.sendStatus(500)
     return
     }
-    var vehicleList = [];
+    
         for (var i = 0; i < result.recordset.length; i++){
-            
             var vehicle = {
                 'vehicleID' :result.recordset[i].vehicleID,
                 'type' :result.recordset[i].type,
                 'powerBILink' :result.recordset[i].powerBILink,
                 'personID' :result.recordset[i].personID,
+                'timeSinceMotService' :bongo.recordset[i].timeSinceMotService
+               // 'timeSinceMotService' : result.recordset[i].timeSinceMotService
+               //'timeSinceMotService' :"SELECT MAX(timeSinceMotService) FROM VehicleDatas WHERE VehicleID ="+result.recordset[i].vehicleID 
+           
             }
+            //console.log(result.recordset[1].timeSinceMotService)
+           //console.log(result.recordset)
             vehicleList.push(vehicle);
         }
-        
+
+        //console.log(bongo.recordset.columns)
         res.render('fleet', {"vehicleList": vehicleList});
     })
-
+})
 })
 var request = new mssql.Request();
 
