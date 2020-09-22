@@ -25,56 +25,39 @@
   <a href="#">
     <div class="d-flex w-100 justify-content-between">
   </a>
-</div>
-    <iframe class="pLink" width="1065" height="654" src="https://app.powerbi.com/view?r=eyJrIjoiYjI0ODg5YTEtODcxYS00NWNhLWE5YzMtNWJiYTVhZGFiYWRkIiwidCI6IjViMTlmZWQ2LTZmMzgtNDk3Yy04MzVmLTgzMGRkMmEyZjI5ZiIsImMiOjl9&pageName=ReportSection" frameborder="0" allowFullScreen="true" ></iframe>
-</body>
-<div style="width:300px;height:350px;line-height:3em;overflow:scroll;padding:5px;background-color:#FCFADD;color:#714D03;scrollbar-base-color:#DEBB07;">
+  <div style="width:300px;height:350px;line-height:3em;overflow:scroll;padding:5px;background-color:#FCFADD;color:#714D03;scrollbar-base-color:#DEBB07;position:absolute">
 <div id= "box"></div>
 <script>
   var rows = [{
-    VehicleID: "Alarm meddelelse",
-    Type: "Tidspunkt",
+    errorMessage: "Alarm meddelelse",
+    time: "Tidspunkt",
 }, {
-    VehicleID: "lortet brænder",
-    Type: " 12:38 18-09-2020",
+    errorMessage: "lortet brænder",
+    time: " 12:38 18-09-2020",
 }];
 
 var html = "<table border='1|1'>";
 for (var i = 0; i < rows.length; i++) {
     html+="<tr>";
-    html+="<td>"+rows[i].VehicleID+"</td>";
-    html+="<td>"+rows[i].Type+"</td>";
+    html+="<td>"+rows[i].errorMessage+"</td>";
+    html+="<td>"+rows[i].time+"</td>";
     html+="</tr>";
 }
 html+="</table>";
 document.getElementById("box").innerHTML = html;
 </script> 
 </div>
-<div id= "box1"></div>
-<script>
-  var rows = [{
-    VehicleID: "VehicleID",
-    Type: "Type",
-    PowerBILink: "PowerBILink",
-    PersonID: "PersonID"
-}, {
-    VehicleID: "328923",
-    Type: "fodervogn",
-    PowerBILink: "www.PowerBILink.dk",
-    PersonID: "666"
-}];
+  {{#each vehicleDataList}}
+    <div>
+      <div style= "position:relative;margin-top: 360px;left:-40px;"></div>
+    <p class="mb-1">Hydraulikservice: {{timeSinceHydService}} timer siden</p>
+    <p class="mb-1">Motorservice: {{timeSinceMotService}} timer siden</p>
+    <p class="mb-1">Sidst aktiv: {{mechanicalMotorTimer}} </p>
+    <p class="mb-1">Antal maskin timer: {{motorRunTimerHour}}</p>
+    </div>
+    {{/each}}
+    <iframe class="pLink" width="1065" height="654" src="https://app.powerbi.com/view?r=eyJrIjoiYjI0ODg5YTEtODcxYS00NWNhLWE5YzMtNWJiYTVhZGFiYWRkIiwidCI6IjViMTlmZWQ2LTZmMzgtNDk3Yy04MzVmLTgzMGRkMmEyZjI5ZiIsImMiOjl9&pageName=ReportSection" frameborder="0" allowFullScreen="true" ></iframe>
+</body>
 
-var html = "<table border='1|1'>";
-for (var i = 0; i < rows.length; i++) {
-    html+="<tr>";
-    html+="<td>"+rows[i].VehicleID+"</td>";
-    html+="<td>"+rows[i].Type+"</td>";
-    html+="<td>"+rows[i].PowerBILink+"</td>";
-    html+="<td>"+rows[i].PersonID+"</td>";
-    html+="</tr>";
-}
-html+="</table>";
-document.getElementById("box1").innerHTML = html;
-</script>
 
 </html>

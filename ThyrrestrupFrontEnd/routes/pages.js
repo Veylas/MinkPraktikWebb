@@ -51,6 +51,43 @@ request.query("select * from Vehicles", (err, result) =>{
     })
 
 })
+var request = new mssql.Request();
+
+router.get("/vehicle", (req, res)=>{
+    var vehicleDataList = [];
+    request.query("select * from [dbo].[VehicleDatas] where vehicleID = 8", (err, result) =>{
+        if(err){
+        console.log("failed to query for vehicles: " + err)
+        res.sendStatus(500)
+        return
+        }
+            for (var i = 0; i < result.recordset.length; i++){
+                
+                var vehicleData = {
+                    'feedLevel' :result.recordset[i].feedLevel,
+                    'fuelLevel' :result.recordset[i].fuelLevel,
+                    'hydraulicPressure' :result.recordset[i].hydraulicPressure,
+                    'hydraulicTemperature' :result.recordset[i].hydraulicTemperature,
+                    'motorTemperature' :result.recordset[i].motorTemperature,
+                    'motorSpeed' :result.recordset[i].motorSpeed,
+                    'timeSinceHydService' :result.recordset[i].timeSinceHydService,
+                    'timeSinceMotService' :result.recordset[i].timeSinceMotService,
+                    'mechanicalMotorTimer' :result.recordset[i].mechanicalMotorTimer,
+                    'motorRunTimerHour' :result.recordset[i].motorRunTimerHour,
+                    'motorRunTimerMinutes' :result.recordset[i].motorRunTimerMinutes,
+                    'nowTime' :result.recordset[i].nowTime,
+                    'vehicleID' :result.recordset[i].vehicleID,
+
+                    
+                }
+                
+                vehicleDataList.push(vehicleData);
+            }
+
+            res.render('vehicle', {"vehicleDataList": vehicleDataList});
+        })
+    
+    })
 var config = ({
     server: process.env.DATABASE_HOST,
     //port: 1433,
