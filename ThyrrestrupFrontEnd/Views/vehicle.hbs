@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
-    <title>Fleet</title>
+    <title>Fleet + {{vehicleID}}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <header class="sidebar">
@@ -47,6 +47,7 @@ html+="</table>";
 document.getElementById("box").innerHTML = html;
 </script> 
 </div>
+<p class="mb-1">The ID: {{vehicleID}} timer siden</p>
   {{#each vehicleDataList}}
     <div>
       <div style= "position:relative;margin-top: 360px;left:-40px;"></div>

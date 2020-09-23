@@ -9,6 +9,9 @@ router.post('/login', authController.login);
 
 router.post('/fleet', function (req, res) {authController.fleet});
 
-router.post('/vehicle', authController.login);
+router.post('/vehicle', function (req, res, next) {authController.fleet
+    var vehicleID = req.body.vehicleID;
+    res.redirect("/vehicle/" + vehicleID)
+});
 
 module.exports = router;

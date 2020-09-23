@@ -1,8 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/auth');
 const mssql = require("mssql");
-const { Result } = require('odbc');
-//const { rows } = require('mssql');
 
 
 
@@ -37,9 +35,6 @@ router.get("/fleet", (req, res)=>{
     return
  }
 
- //var pong = bong.recordset
-
-
 request.query("select * from Vehicles", (err, result) =>{
     if(err){
     console.log("failed to query for vehicles: " + err)
@@ -53,53 +48,43 @@ request.query("select * from Vehicles", (err, result) =>{
                 'type' :result.recordset[i].type,
                 'powerBILink' :result.recordset[i].powerBILink,
                 'personID' :result.recordset[i].personID,
-                'timeSinceMotService' :bongo.recordset[i].timeSinceMotService
-               // 'timeSinceMotService' : result.recordset[i].timeSinceMotService
-               //'timeSinceMotService' :"SELECT MAX(timeSinceMotService) FROM VehicleDatas WHERE VehicleID ="+result.recordset[i].vehicleID 
-           
+                'timeSinceMotService' :bongo.recordset[i].timeSinceMotService       
             }
-            //console.log(result.recordset[1].timeSinceMotService)
-           //console.log(result.recordset)
             vehicleList.push(vehicle);
         }
-
-        //console.log(bongo.recordset.columns)
         res.render('fleet', {"vehicleList": vehicleList});
     })
 })
 })
 var request = new mssql.Request();
 
-router.get("/vehicle", (req, res)=>{
+router.get("/vehicle/:vehicleID", (req, res, next)=>{
+var vehicleID = req.params.vehicleID
+console.log(vehicleID);
     var vehicleDataList = [];
-    request.query("select * from [dbo].[VehicleDatas] where vehicleID = 8", (err, result) =>{
-        if(err){
+    request.query("select * from [dbo].[VehicleDatas] where vehicleID ="+vehicleID, (err, result) =>{
+        if(err || result.recordset.length < 1){
         console.log("failed to query for vehicles: " + err)
         res.sendStatus(500)
         return
         }
-            for (var i = 0; i < result.recordset.length; i++){
-                
                 var vehicleData = {
-                    'feedLevel' :result.recordset[i].feedLevel,
-                    'fuelLevel' :result.recordset[i].fuelLevel,
-                    'hydraulicPressure' :result.recordset[i].hydraulicPressure,
-                    'hydraulicTemperature' :result.recordset[i].hydraulicTemperature,
-                    'motorTemperature' :result.recordset[i].motorTemperature,
-                    'motorSpeed' :result.recordset[i].motorSpeed,
-                    'timeSinceHydService' :result.recordset[i].timeSinceHydService,
-                    'timeSinceMotService' :result.recordset[i].timeSinceMotService,
-                    'mechanicalMotorTimer' :result.recordset[i].mechanicalMotorTimer,
-                    'motorRunTimerHour' :result.recordset[i].motorRunTimerHour,
-                    'motorRunTimerMinutes' :result.recordset[i].motorRunTimerMinutes,
-                    'nowTime' :result.recordset[i].nowTime,
-                    'vehicleID' :result.recordset[i].vehicleID,
-
-                    
+                    'feedLevel' :result.recordset[0].feedLevel,
+                    'fuelLevel' :result.recordset[0].fuelLevel,
+                    'hydraulicPressure' :result.recordset[0].hydraulicPressure,
+                    'hydraulicTemperature' :result.recordset[0].hydraulicTemperature,
+                    'motorTemperature' :result.recordset[0].motorTemperature,
+                    'motorSpeed' :result.recordset[0].motorSpeed,
+                    'timeSinceHydService' :result.recordset[0].timeSinceHydService,
+                    'timeSinceMotService' :result.recordset[0].timeSinceMotService,
+                    'mechanicalMotorTimer' :result.recordset[0].mechanicalMotorTimer,
+                    'motorRunTimerHour' :result.recordset[0].motorRunTimerHour,
+                    'motorRunTimerMinutes' :result.recordset[0].motorRunTimerMinutes,
+                    'nowTime' :result.recordset[0].nowTime,
+                    'vehicleID' :result.recordset[0].vehicleID
                 }
-                
+                console.log(result.recordset)
                 vehicleDataList.push(vehicleData);
-            }
 
             res.render('vehicle', {"vehicleDataList": vehicleDataList});
         })
@@ -118,9 +103,10 @@ mssql.connect(config, function (err) {
     if (err) console.log(err);
 
 })
-/*router.get('/fleet', function (req, res) => {
-    res.send('fleet'/*, {vehicle: vehicle);
-});*/
+router.post('/vehicle', function (req, res, next){
+    var vehicleID = req.body.vehicleID;
+    res.redirect("/vehicle/" + vehicleID)
+});
 
 router.get('/vehicle', (req, res) => {
     res.render('vehicle');
