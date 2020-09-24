@@ -13,7 +13,8 @@
         <a class="active" href="/"><i class="fa fa-fw fa-home"></i> Home</a>
         <a href="/fleet"><i class="fa fa-fw fa-pie-chart"></i> Statistic</a>
         <a href="/contact"><i class="fa fa-fw fa-envelope"></i> Kontakt</a>
-        <a href="/register"><i class="fa fa-fw fa-user"></i> Register</a>'
+        <a href="/register"><i class="fa fa-fw fa-user"></i> Register</a>
+        <a href="/createMachine"><i class="fa fa-fw fa-user"></i> createMachine</a>
     </header>
 
 <body>
@@ -34,16 +35,9 @@
     <div>
     <img src="https://cdn.lfmedia.dk/CMSContent/Media/PageContent/Max/22784.jpg" class="card-img-top" style="width: 175px; height: 100px; float: left;" alt="...">
     <p class="mb-1">Type: {{type}}</p>
-    <p class="mb-1">Timer siden sidste servicecheck: {{timeSinceMotService}}</p>
-    <p class="mb-1">Sidst aktiv: {{vehicleID}}</p>
-    <p class="mb-1">Antal maskin timer: {{personID}}</p>
-
-<script type="text/javascript">
-    document.getElementById("myButton").onclick = function () {
-        location.href =('/vehicle/'+{{vehicleID}})
-    };
-</script>
-    <button id="myButton" class="float-left submit-button" >Oversigt</button>
+    <p class="mb-1">Timer siden sidste motor servicecheck: {{timeSinceMotService}}</p>
+    <p class="mb-1">vehicleID: {{vehicleID}}</p>
+    <p class="mb-1">person id: {{personID}}</p>
     </div>
   </a>
   

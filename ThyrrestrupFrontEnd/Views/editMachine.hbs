@@ -11,7 +11,7 @@
 </head>
 <body>
     <nav>
-        <h4>Node MySQL</h4>
+        <h4>Rediger maskine</h4>
         <ul>
             <ul>
                    <li><a href="/">Home</a></li>
@@ -29,31 +29,32 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                Register Form
+                Rediger maskine
             </div>
             <div class="card-body">
-                <form action="/auth/register" method="POST">
+                <form action="/auth/editMachine" method="POST">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" name ="name">
+
+                        <label for="type">Maskine type</label>
+                        <input type="text" class="form-control" id="type" name ="type">
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <label for="vehicleID">Maskine ID</label>
+                        <input type="text" class="form-control" id="vehicleID" name="vehicleID">
                     </div>
 
                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                        <label for="powerBILink">PowerBi link</label>
+                        <input type="text" class="form-control" id="powerBILink" name="powerBILink">
                     </div>
 
                     <div class="form-group">
-                        <label for="passwordConfirm">Password Confirm</label>
-                        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm">
+                        <label for="personID">Person ID</label>
+                        <input type="text" class="form-control" id="personID" name="personID">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Register User</button>
+                    <button type="submit" class="btn btn-primary">Rediger Maskine</button>
                 </form>
             </div>
         </div>

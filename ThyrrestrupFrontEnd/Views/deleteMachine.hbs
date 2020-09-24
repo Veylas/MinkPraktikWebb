@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="/style.css">
     <title>Document</title>
 </head>
+
 <body>
     <nav>
-        <h4>Node MySQL</h4>
+        <h4>Slet Maskine</h4>
         <ul>
             <ul>
                    <li><a href="/">Home</a></li>
@@ -29,31 +30,17 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-                Register Form
+                Slet Maskine form <Form></Form>
             </div>
             <div class="card-body">
-                <form action="/auth/register" method="POST">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" name ="name">
-                    </div>
+                <form action="/auth/deleteMachine" method="POST">
 
                     <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <label for="vehicleID">Maskine ID</label>
+                        <input type="text" class="form-control" id="vehicleID" name="vehicleID">
                     </div>
 
-                   <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="passwordConfirm">Password Confirm</label>
-                        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Register User</button>
+                    <button type="submit" class="btn btn-primary">Slet</button>
                 </form>
             </div>
         </div>
@@ -61,6 +48,12 @@
         <h4 class="alert alert-danger mt-4">{{message}}</h4>
         {{/if}}
     </div>
+
+    <ul class="list-group" style="width: 800px; height: 200px; float: left;"> 
+  <li class="list-group-item">List maskiner</li>
+  <li class="list-group-item">Manskine: </li>
+</ul>
+
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

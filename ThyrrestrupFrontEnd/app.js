@@ -9,6 +9,7 @@ dotenv.config({ path: './.env'})
 
 const app = express();
 
+// config to determine the database connection, which is retrieved from the ".env" file
 var config = ({
     server: process.env.DATABASE_HOST,
     //port: 1433,
@@ -50,7 +51,7 @@ mssql.connect(config, function (error) {
     if(error) {
         console.log(error)
     } else {
-        console.log("MsSQL Connected...")
+        console.log("MsSQL Connected...") // log to confirm it connected to database
     }
 })
 
@@ -59,6 +60,7 @@ mssql.connect(config, function (error) {
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
 
+// define the port the app will run on
 app.listen("3000", ()=>{
-    console.log("Server started on port 3000");
+    console.log("Server started on port 3000"); // log to confirm it started running
 })

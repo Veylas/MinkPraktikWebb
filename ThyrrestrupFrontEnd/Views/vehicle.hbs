@@ -32,7 +32,7 @@
     errorMessage: "Alarm meddelelse",
     time: "Tidspunkt",
 }, {
-    errorMessage: "lortet brænder",
+    errorMessage: "AlarmHydraulic",
     time: " 12:38 18-09-2020",
 }];
 
@@ -58,6 +58,22 @@ document.getElementById("box").innerHTML = html;
     </div>
     {{/each}}
     <iframe class="pLink" width="1065" height="654" src="https://app.powerbi.com/view?r=eyJrIjoiYjI0ODg5YTEtODcxYS00NWNhLWE5YzMtNWJiYTVhZGFiYWRkIiwidCI6IjViMTlmZWQ2LTZmMzgtNDk3Yy04MzVmLTgzMGRkMmEyZjI5ZiIsImMiOjl9&pageName=ReportSection" frameborder="0" allowFullScreen="true" ></iframe>
+
+    </script> 
+
+
+{{#each alarms}}
+<p class="mb-1">The ID: {{vehicleID}} timer siden</p>
+    <div>
+      <div style= "position:relative;margin-top: 600px;left:-40px;"></div>
+    <p class="mb-1">Feed LEvel: {{feedLevel}} timer siden</p>
+    <p class="mb-1">Fuel Level: {{fuelLevel}} timer siden</p>
+    <p class="mb-1">hydraulic Pressure: {{hydraulicPressure}} </p>
+    <p class="mb-1">Hydraulic Temperature: {{hydraulicTemperature}}</p>
+    </div>
+    {{/each}}
+
+    
 </body>
 
 
