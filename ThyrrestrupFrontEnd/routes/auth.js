@@ -16,5 +16,9 @@ router.post('/createMachine', authController.createMachine);
 
 router.post('/fleet', function (req, res) {authController.fleet});
 
+router.post('/vehicle', function (req, res, next){
+    var vehicleID = req.body.vehicleID;
+    res.redirect("/vehicle/" + vehicleID) 
+});
 
 module.exports = router;

@@ -37,10 +37,7 @@ router.get('/fleet', authController.fleet);
 router.get("/vehicle/:vehicleID", authController.vehicle)
 
 // this post will post the vehicle ID if it is in the url
-router.post('/vehicle', function (req, res, next){
-    var vehicleID = req.body.vehicleID;
-    res.redirect("/vehicle/" + vehicleID) 
-});
+
 
 
 module.exports = router;
