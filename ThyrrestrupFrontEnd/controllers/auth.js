@@ -179,11 +179,9 @@ exports.deleteMachine = async (req, res) => {
 }
 
 
-exports.editMachine = async (req, res) => {
-    console.log(req.body);
-    
-    const { type, vehicleID, powerBILink, personID } = req.body; // here the input from the user is retrieved from the body of the html
-
+exports.editMachineLoad = async (req, res) => {
+    var vehicleID = req.params.vehicleID
+    //const { type, powerBILink, personID } = req.body; // here the input from the user is retrieved from the body of the html
     // this query will check if a Vehicle is registered under that ID
     request.query("SELECT * FROM Vehicles WHERE vehicleID ="+vehicleID, async (error, results) => {
         // error handling for the query
@@ -196,16 +194,45 @@ exports.editMachine = async (req, res) => {
                 message: 'Dette ID findes ikke i databasen' // message is sent to html where it will handle it and show it
             }) 
         }
+        else{
+            var vehicleList = [];
+        for (var i = 0; i < results.recordset.length; i++){
+            var vehicle = {
+                'vehicleID' :results.recordset[i].vehicleID,
+                'type' :results.recordset[i].type,
+                'powerBILink' :results.recordset[i].powerBILink,
+                'personID' :results.recordset[i].personID
+            }
+            vehicleList.push(vehicle); // everytime the loop goes through one vehicle it wil be pushed to the list
+        }
+        res.render('editMachine', {"vehicleList": vehicleList})
+    }
     });
-
-
+ 
+}
+exports.editMachineEdit = async (req, res) => {
+    //var vehicleID = req.params.vehicleID
+    const { type, vehicleID, powerBILink, personID } = req.body; // here the input from the user is retrieved from the body of the html
+    // this query will check if a Vehicle is registered under that ID
+    request.query("SELECT * FROM Vehicles WHERE vehicleID ="+vehicleID, async (error, results) => {
+        // error handling for the query
+        if(error) {
+            console.log(error);
+        }
+// if an ID is allready used
+        if(results.recordset.length <= 0) {
+            return res.render('editMachine', {
+                message: 'Dette ID findes ikke i databasen' // message is sent to html where it will handle it and show it
+            }) 
+    }
+    });
     // here we query email, name, hashedpassword and insert it into the database
     request.query("UPDATE Vehicles SET type ='"+type+"', powerBILink = '"+powerBILink+"', personID = '"+personID+"' WHERE vehicleID ="+vehicleID, (error, results) =>{
         if(error){
             // logging if an error occurs
             console.log(error);
         } else {
-            return res.render('editMachine', {
+            return res.render('./editMachine', {
                 // This messege will be sent to the html called register and then the html will show it to the user
                 message: 'Maskinen blev redigeret' // message is sent to html where it will handle it and show it
         });
@@ -317,3 +344,40 @@ var vehicleDataList = [];
     
     })
 }
+
+/*
+exports.searcheMachine = async (req, res) => {
+    console.log(req.body);
+    
+    const { vehicleID } = req.body; // here the input from the user is retrieved from the body of the html
+
+    // this query will check if a Vehicle is registered under that ID
+    request.query("SELECT * FROM Vehicles where vehicleID ="+vehicleID, async (error, results) => {
+        // error handling for the query
+        console.log(results.recordset)
+        if(error) {
+            console.log(error);
+            return res.render('deleteMachine', {
+                message: 'Hov der skete en fejl under sletning' // message is sent to html where it will handle it and show it
+            });
+        }
+// if an ID is allready used
+       if(results.recordset.length <= 0) {
+            return res.render('deleteMachine', {
+                message: 'Maskinen findes ikke i databasen' // message is sent to html where it will handle it and show it
+            });
+        }
+    })
+    var vehicleList = [];
+    // here we query email, name, hashedpassword and insert it into the database
+    for (var i = 0; i < results.recordset.length; i++){
+        var vehicle = {
+            'vehicleID' :results.recordset[i].vehicleID,
+            'powerBILink' :results.recordset[i].powerBILink,
+            'personID' :results.recordset[i].personID,
+            'type' :results.recordset[i].type       
+        }
+        vehicleList.push(vehicle); // everytime the loop goes thorugh one vehicle it wil be pushed to the list
+    }
+    res.render('fleet', {"vehicleList": vehicleList})
+}*/

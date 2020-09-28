@@ -10,8 +10,12 @@ router.post('/login', authController.login);
 
 router.post('/deleteMachine', authController.deleteMachine);
 
-router.post('/editMachine', authController.editMachine);
+router.post('/editMachine', authController.editMachineEdit)
 
+/*function (req, res, next){
+    var vehicleID = req.body.vehicleID;
+    res.redirect("/editMachine/" + vehicleID) 
+});*/
 router.post('/createMachine', authController.createMachine);
 
 router.post('/fleet', function (req, res) {authController.fleet});

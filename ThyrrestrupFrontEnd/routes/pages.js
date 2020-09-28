@@ -3,8 +3,8 @@ const authController = require('../controllers/auth');
 const mssql = require("mssql");
 
 
-
 const router = express.Router();
+
 // Here we get and render home page
 router.get('/', (req, res) => {
     res.render('index');
@@ -15,9 +15,8 @@ router.get('/deleteMachine', (req, res) => {
 router.get('/createMachine', (req, res) => {
     res.render('createMachine');
 });
-router.get('/editMachine', (req, res) => {
-    res.render('editMachine');
-});
+router.get('/editMachine/:vehicleID', authController.editMachineLoad)
+
 // Register page is rendered
 router.get('/register', (req, res) => {
     res.render('register');

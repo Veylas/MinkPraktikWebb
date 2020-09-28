@@ -28,7 +28,7 @@
   </a>
 
   {{#each vehicleList}}
-  <a href='/vehicle/{{vehicleID}}' class="list-group-item list-group-item-action">
+  <a class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
       <h5 class="machineNr: ">{{vehicleID}}</h5>
     </div>
@@ -38,9 +38,16 @@
     <p class="mb-1">Timer siden sidste motor servicecheck: {{timeSinceMotService}}</p>
     <p class="mb-1">vehicleID: {{vehicleID}}</p>
     <p class="mb-1">person id: {{personID}}</p>
+
+ <input type="submit" value="Gå til maskine" class="btn btn-primary"
+   onclick="window.location='/vehicle/{{vehicleID}}';"/>
+
+<input type="submit" value="Rediger maskine" class="btn btn-primary"
+    onclick="window.location='/editMachine/{{vehicleID}}';"/>
     </div>
   </a>
-  
+
+
     {{/each}}
 
 
