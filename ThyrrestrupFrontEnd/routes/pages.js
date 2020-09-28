@@ -9,13 +9,12 @@ const router = express.Router();
 router.get('/', (req, res) => {
     res.render('index');
 });
-router.get('/deleteMachine', (req, res) => {
-    res.render('deleteMachine');
-});
+router.get('/deleteMachine/:vehicleID', authController.deleteMachine);
+
 router.get('/createMachine', (req, res) => {
     res.render('createMachine');
 });
-router.get('/editMachine/:vehicleID', authController.editMachineLoad)
+router.get('/editMachine/:vehicleID', authController.editMachineLoad);
 
 // Register page is rendered
 router.get('/register', (req, res) => {
@@ -33,7 +32,7 @@ router.get('/contact', (req, res) => {
 router.get('/fleet', authController.fleet);
 
 // The router for vehicle is defined, now it can be used to get information to the page
-router.get("/vehicle/:vehicleID", authController.vehicle)
+router.get('/vehicle/:vehicleID', authController.vehicle)
 
 // this post will post the vehicle ID if it is in the url
 

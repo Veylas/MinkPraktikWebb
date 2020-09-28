@@ -142,9 +142,8 @@ exports.createMachine = async (req, res) => {
 }
 
 exports.deleteMachine = async (req, res) => {
-    console.log(req.body);
-    
-    const { vehicleID } = req.body; // here the input from the user is retrieved from the body of the html
+    var vehicleID = req.params.vehicleID
+    //const { vehicleID } = req.body; // here the input from the user is retrieved from the body of the html
 
     // this query will check if a Vehicle is registered under that ID
     request.query("SELECT * FROM Vehicles where vehicleID ="+vehicleID, async (error, results) => {
