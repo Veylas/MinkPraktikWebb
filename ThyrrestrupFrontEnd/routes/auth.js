@@ -10,7 +10,12 @@ router.post('/login', authController.login);
 
 router.post('/deleteMachine', authController.deleteMachine);
 
+router.post('/service', authController.service);
+
 router.post('/editMachine', authController.editMachineEdit)
+
+//router.post('/service', authController.servicePost)
+
 
 /*function (req, res, next){
     var vehicleID = req.body.vehicleID;

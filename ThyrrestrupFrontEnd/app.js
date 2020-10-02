@@ -4,6 +4,7 @@ const mssql = require("mssql");
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 var bodyParser = require("body-parser"); 
+const { signedCookie } = require("cookie-parser");
 
 dotenv.config({ path: './.env'})
 
@@ -36,6 +37,7 @@ app.use(express.static(publicDirectory));
 app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 app.use(cookieParser());
+
 
 console.log(__dirname);
 

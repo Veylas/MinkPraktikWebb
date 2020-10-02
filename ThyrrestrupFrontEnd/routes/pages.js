@@ -1,6 +1,5 @@
 const express = require('express');
 const authController = require('../controllers/auth');
-const mssql = require("mssql");
 
 
 const router = express.Router();
@@ -20,6 +19,11 @@ router.get('/editMachine/:vehicleID', authController.editMachineLoad);
 router.get('/register', (req, res) => {
     res.render('register');
 });
+
+router.get('/service/:vehicleID', authController.serviceLoad);
+
+
+
 // login page is rendered
 router.get('/login', (req, res) => {
     res.render('login');
@@ -33,9 +37,6 @@ router.get('/fleet', authController.fleet);
 
 // The router for vehicle is defined, now it can be used to get information to the page
 router.get('/vehicle/:vehicleID', authController.vehicle)
-
-// this post will post the vehicle ID if it is in the url
-
 
 
 module.exports = router;
