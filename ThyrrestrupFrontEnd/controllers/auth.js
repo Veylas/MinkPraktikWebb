@@ -1,7 +1,7 @@
 const mssql = require("mssql");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-
+const cookieParser = require('cookie-parser')
 
 var request = new mssql.Request();
 
@@ -21,7 +21,10 @@ mssql.connect(config, function (err) {
 })
 
 exports.login = async (req, res) => {
+
     try {
+
+
         const { email, password } = req.body;
         if (!email || !password) {
             return res.status(400).render('login', {
@@ -41,12 +44,16 @@ exports.login = async (req, res) => {
                 // if there's no error and both password and email is correct it will go in this else statement
             } else {
                 var id = results.recordset[0].id;
+                var email = results.recordset[0].email;
+                var hashedPassword = results.recordset[0].password;
+                var admin = results.recordset[0].admin;
+
                 console.log(results.recordset[0].password)
-                const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ id: id, email: email, hashedPassword: password, admin: admin}, process.env.JWT_SECRET, {
                     expiresIn: process.env.JWT_EXPIRES_IN
                 })
 
-                console.log("The token is:" + token);
+                // console.log("The token is:" + token);
 
                 const cookieOptions = {
                     expires: new Date(
@@ -108,7 +115,6 @@ exports.register = async (req, res) => {
 
 exports.createMachine = async (req, res) => {
     console.log(req.body);
-
     const { type, vehicleID, powerBILink, personID } = req.body; // here the input from the user is retrieved from the body of the html
 
     // this query will check if a Vehicle is registered under that ID
@@ -226,7 +232,7 @@ exports.editMachineEdit = async (req, res) => {
         }
     });
     // here we query email, name, hashedpassword and insert it into the database
-    request.query("UPDATE Vehicles SET type ='(" + type + "', powerBILink = '" + powerBILink + "', personID = '" + personID + '"vehicleID ="' + vehicleID+"')", (error, results) => {
+    request.query("UPDATE Vehicles SET type ='(" + type + "', powerBILink = '" + powerBILink + "', personID = '" + personID + '"vehicleID ="' + vehicleID + "')", (error, results) => {
         if (error) {
             // logging if an error occurs
             console.log(error);
@@ -241,14 +247,25 @@ exports.editMachineEdit = async (req, res) => {
 }
 
 exports.fleet = async (req, res) => {
-    var vehicleList = []; // the list for vehicles is initiated
+    const token = req.cookies.jwt
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    var personID = decoded.id
 
-    request.query("select * from Vehicles", (err, vehiclesResult) => {
+
+    var vehicleList = []; // the list for vehicles is initiated
+    request.query("select * from Vehicles where personID ="+personID, (err, vehiclesResult) => {
+        console.log(vehiclesResult.recordset[0].vehicleID)
         if (err) {
             console.log("failed to query for vehicles: " + err)
             res.sendStatus(500)
             return
         }
+        if (vehiclesResult <=0) {
+            console.log("No vehicles on this customer: ")
+            res.sendStatus(500)
+            return
+        }
+       // var anID = vehiclesResult.recordset.vehicleID
         // query all vehicles
 
         request.query("SELECT vehicleID, max(timeSinceMotService) timeSinceMotService FROM VehicleDatas where vehicleID is not null or timeSinceMotService is not null group by vehicleID order by vehicleID", (err, result) => {
@@ -257,9 +274,15 @@ exports.fleet = async (req, res) => {
                 res.sendStatus(500)
                 return
             }
+            if (vehiclesResult <=0 ) {
+                console.log("No vehicles on this customer: ")
+                res.sendStatus(500)
+                return
+            }
+            else {
 
             // The list is populated using result.recordset and then looping through all the results
-            for (var i = 0; i < result.recordset.length; i++) {
+            for (var i = 0; i < vehiclesResult.recordset.length; i++) {
                 var vehicle = {
                     'vehicleID': vehiclesResult.recordset[i].vehicleID,
                     'type': vehiclesResult.recordset[i].type,
@@ -270,9 +293,11 @@ exports.fleet = async (req, res) => {
                 vehicleList.push(vehicle); // everytime the loop goes thorugh one vehicle it wil be pushed to the list
             }
             res.render('fleet', { "vehicleList": vehicleList })
+        }
         });
     });
 }
+
 
 
 exports.vehicle = async (req, res) => {
@@ -286,38 +311,38 @@ exports.vehicle = async (req, res) => {
             console.log("failed to query for vehicles: " + err)
             return
         }
-        
+
         else if (alarmsResult.recordset.length > 0) {
 
             alu = alarmsResult.recordset[0].alarmCode
             // Chained replacements will now change the numbers out with values such as "hydraulic Temp Too High"
             var replaceStringVals = alu.
-            replace('0', 'Hydraulic Temp. Warning').
-            replace('1', 'Hydraulic Temp. Too High').
-            replace('2','Hydraulic Sensor Fault').
-            replace('3', 'Hydraulic Oil Level Low').
-            replace('4','Generator ON').
-            replace('5','Fuel Level Alarm').
-            replace('6','Feeding Active').
-            replace('7','Air Filter Clogged').
-            replace('8','').
-            replace('9','Preheat ON').
-            replace('10','Motor Temp. Warning').
-            replace('11','Motor Temp. Too High').
-            replace('12','Motor Temp. Sensor Fault').
-            replace('13','Motor Running').
-            replace('14','Motor Oil Pressure Low').
-            replace('15','Mixer Mode Active').
-            replace('16','Warning Active On Display').
-            replace('17','Stop! Hyd/Mot Temperature Too High').
-            replace('18','Stop! Oil Pressure Too High').
-            replace('19','Motor Service Warning').
-            replace('20','Motor Service Now').
-            replace('21','Hydraulic Oil Too Cold/Speed Too High').
-            replace('22','Hydraulic Service Warning').
-            replace('23','Hydraulic Service Now');
-          
-           
+                replace('0', 'Hydraulic Temp. Warning').
+                replace('1', 'Hydraulic Temp. Too High').
+                replace('2', 'Hydraulic Sensor Fault').
+                replace('3', 'Hydraulic Oil Level Low').
+                replace('4', 'Generator ON').
+                replace('5', 'Fuel Level Alarm').
+                replace('6', 'Feeding Active').
+                replace('7', 'Air Filter Clogged').
+                replace('8', 'CAN Bus ERORR. No reading').
+                replace('9', 'Preheat ON').
+                replace('10', 'Motor Temp. Warning').
+                replace('11', 'Motor Temp. Too High').
+                replace('12', 'Motor Temp. Sensor Fault').
+                replace('13', 'Motor Running').
+                replace('14', 'Motor Oil Pressure Low').
+                replace('15', 'Mixer Mode Active').
+                replace('16', 'Warning Active On Display').
+                replace('17', 'Stop! Hyd/Mot Temperature Too High').
+                replace('18', 'Stop! Oil Pressure Too High').
+                replace('19', 'Motor Service Warning').
+                replace('20', 'Motor Service Now').
+                replace('21', 'Hydraulic Oil Too Cold/Speed Too High').
+                replace('22', 'Hydraulic Service Warning').
+                replace('23', 'Hydraulic Service Now');
+
+
             for (var i = 0; i < alarmsResult.recordset.length; i++) {
                 var alarm = {
                     'alarmCode': replaceStringVals,
@@ -326,48 +351,48 @@ exports.vehicle = async (req, res) => {
                 alarms.push(alarm);
                 console.log(alarm)
             }
-            }
-        
+        }
+
     })
-    
-        request.query("select * from [dbo].[VehicleDatas] where vehicleID ="+vehicleID, (err, result) => {
-            // Here is the error handling of the query, if an error or no result happens code will run the if statement
-            if (err || result.recordset.length < 1) {
-                console.log("failed to query for vehicles: " + err)
-                res.sendStatus(500)
-                return
-            }
-            var vehicleData = {
-                'feedLevel': result.recordset[0].feedLevel,
-                'fuelLevel': result.recordset[0].fuelLevel,
-                'hydraulicPressure': result.recordset[0].hydraulicPressure,
-                'hydraulicTemperature': result.recordset[0].hydraulicTemperature,
-                'motorTemperature': result.recordset[0].motorTemperature,
-                'motorSpeed': result.recordset[0].motorSpeed,
-                'timeSinceHydService': result.recordset[0].timeSinceHydService,
-                'timeSinceMotService': result.recordset[0].timeSinceMotService,
-                'mechanicalMotorTimer': result.recordset[0].mechanicalMotorTimer,
-                'motorRunTimerHour': result.recordset[0].motorRunTimerHour,
-                'motorRunTimerMinutes': result.recordset[0].motorRunTimerMinutes,
-                'nowTime': result.recordset[0].nowTime,
-                'vehicleID': result.recordset[0].vehicleID,
 
-                // alarms is thrown into result here
-            }
-            vehicleDataList.push(vehicleData); // the vehicleData is pushed to the list "vehicleDataList"
+    request.query("select * from [dbo].[VehicleDatas] where vehicleID =" + vehicleID, (err, result) => {
+        // Here is the error handling of the query, if an error or no result happens code will run the if statement
+        if (err || result.recordset.length < 1) {
+            console.log("failed to query for vehicles: " + err)
+            res.sendStatus(500)
+            return
+        }
+        var vehicleData = {
+            'feedLevel': result.recordset[0].feedLevel,
+            'fuelLevel': result.recordset[0].fuelLevel,
+            'hydraulicPressure': result.recordset[0].hydraulicPressure,
+            'hydraulicTemperature': result.recordset[0].hydraulicTemperature,
+            'motorTemperature': result.recordset[0].motorTemperature,
+            'motorSpeed': result.recordset[0].motorSpeed,
+            'timeSinceHydService': result.recordset[0].timeSinceHydService,
+            'timeSinceMotService': result.recordset[0].timeSinceMotService,
+            'mechanicalMotorTimer': result.recordset[0].mechanicalMotorTimer,
+            'motorRunTimerHour': result.recordset[0].motorRunTimerHour,
+            'motorRunTimerMinutes': result.recordset[0].motorRunTimerMinutes,
+            'nowTime': result.recordset[0].nowTime,
+            'vehicleID': result.recordset[0].vehicleID,
 
-            res.render('vehicle', { "vehicleDataList": vehicleDataList, "alarms": alarms }); // the vehicle page is rendered and sending the list with it
-        })
+            // alarms is thrown into result here
+        }
+        vehicleDataList.push(vehicleData); // the vehicleData is pushed to the list "vehicleDataList"
+
+        res.render('vehicle', { "vehicleDataList": vehicleDataList, "alarms": alarms }); // the vehicle page is rendered and sending the list with it
+    })
 
 
 }
 
-exports.service = async (req, res) => { 
+exports.service = async (req, res) => {
     //var vehicleID = req.params.vehicleID
     var { brokenPart1, brokenPart2, brokenPart3, vehicleID } = req.body;
-   // var vehicleID = req.params.vehicleID
+    // var vehicleID = req.params.vehicleID
 
-    request.query("insert into Service (brokenPart1, brokenPart2, brokenPart3, vehicleID) VALUES ('"+brokenPart1+"', '"+brokenPart2+"', '"+brokenPart3+"',"+vehicleID+")", (err, serviceResult) => {
+    request.query("insert into Service (brokenPart1, brokenPart2, brokenPart3, vehicleID) VALUES ('" + brokenPart1 + "', '" + brokenPart2 + "', '" + brokenPart3 + "'," + vehicleID + ")", (err, serviceResult) => {
         if (err) {
             console.log("failed to query for service: " + err)
             return
@@ -376,9 +401,68 @@ exports.service = async (req, res) => {
     });
 }
 
-exports.serviceLoad = async (req, res) => { 
+exports.serviceLoad = async (req, res) => {
     var vehicleID = req.params.vehicleID
     console.log(vehicleID)
-    res.render('service', {vehicleID})
+    res.render('service', { vehicleID })
 }
 
+/*
+exports.authenticate = async (req, res, next) => {
+    const token = req.cookies.jwt
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    console.log(decoded. admin)
+    var role = 'null';
+    //console.log(token)
+
+    if (!token) {
+        return res.status(401).end()
+    }
+
+    var authorized = false;
+   //if (decoded.admin = Owner)
+        authorized = decoded.admin === role;
+       
+       if (authorized) {
+           return next();
+       }
+       if (role == 'Owner') {
+       return next();
+    }
+       return res.status(401).json({
+           success: false,
+           message: 'Unauthorized',
+       })
+    }*/
+
+    exports.isUserOwner = async (req, res, next) => {
+        const token = req.cookies.jwt
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if (decoded.admin == 'Owner') {
+        next();
+        } else {
+            return next(err);
+        }
+    };
+
+    exports.isUserUser = async (req, res, next) => {
+        const token = req.cookies.jwt
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if (decoded.admin == 'User') {
+        next();
+        } else {
+            return next(err);
+        }
+    };
+
+/*
+    try {
+        payload = jwt.verify(token, process.env.JWT_SECRET)
+    } catch (e) {
+        if (e instanceof jwt.JsonWebTokenError) {
+            return res.status(401).end()
+        }
+        return res.status(400).end()
+    }
+    return next()
+}*/

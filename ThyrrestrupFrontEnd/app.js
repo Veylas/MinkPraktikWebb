@@ -5,6 +5,12 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 var bodyParser = require("body-parser"); 
 const { signedCookie } = require("cookie-parser");
+const session = require('express-session');
+
+
+//const {verify} = require('./controllers/auth')
+
+
 
 dotenv.config({ path: './.env'})
 
@@ -38,6 +44,10 @@ app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 app.use(cookieParser());
 
+//app.get('/contact', verify)
+
+
+
 
 console.log(__dirname);
 
@@ -61,6 +71,7 @@ mssql.connect(config, function (error) {
 //Define Routes
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
+
 
 // define the port the app will run on
 app.listen("3000", ()=>{
