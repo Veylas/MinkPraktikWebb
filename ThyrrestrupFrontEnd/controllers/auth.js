@@ -250,31 +250,53 @@ exports.fleet = async (req, res) => {
     const token = req.cookies.jwt
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     var personID = decoded.id
+    var userRights = decoded.admin
 
+    var statement = ("");
+    var anArray = [];
 
     var vehicleList = []; // the list for vehicles is initiated
-    request.query("select * from Vehicles where personID ="+personID, (err, vehiclesResult) => {
+    if (userRights == 'User') { 
+        statement = ("select * from Vehicles where personID ="+personID)
+    }
+
+    if (userRights == 'Owner') {
+        statement = ("select * from Vehicles")
+    }
+
+    request.query(statement, (err, vehiclesResult) => {
         console.log(vehiclesResult.recordset[0].vehicleID)
         if (err) {
             console.log("failed to query for vehicles: " + err)
             res.sendStatus(500)
             return
         }
-        if (vehiclesResult <=0) {
+
+        if (!vehiclesResult.recordset) {
             console.log("No vehicles on this customer: ")
             res.sendStatus(500)
             return
         }
+        
+        for (var i = 0; i < vehiclesResult.recordset.length; i++) {
+            var vehicleIDs = {
+                'vehicleID': vehiclesResult.recordset[i].vehicleID,
+            }
+            anArray.push(vehiclesResult.recordset[i].vehicleID); //
+        }
+        
        // var anID = vehiclesResult.recordset.vehicleID
         // query all vehicles
-
-        request.query("SELECT vehicleID, max(timeSinceMotService) timeSinceMotService FROM VehicleDatas where vehicleID is not null or timeSinceMotService is not null group by vehicleID order by vehicleID", (err, result) => {
+       t = anArray.toString()
+       console.log(t)
+       
+        request.query("SELECT vehicleID, max(timeSinceMotService) timeSinceMotService FROM VehicleDatas where vehicleID IN ("+t+") and timeSinceMotService is not null group by vehicleID order by vehicleID", (err, result) => {
             if (err) {
                 console.log("failed to query for vehicles: " + err)
                 res.sendStatus(500)
                 return
             }
-            if (vehiclesResult <=0 ) {
+            if (!result.recordset[0]) {
                 console.log("No vehicles on this customer: ")
                 res.sendStatus(500)
                 return
@@ -455,14 +477,13 @@ exports.authenticate = async (req, res, next) => {
         }
     };
 
-/*
-    try {
-        payload = jwt.verify(token, process.env.JWT_SECRET)
-    } catch (e) {
-        if (e instanceof jwt.JsonWebTokenError) {
-            return res.status(401).end()
+    exports.isUserOrOwner = async (req, res, next) => {
+        const token = req.cookies.jwt
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if (decoded.admin == 'User' || decoded.admin == 'Owner') {
+        next();
+        } else {
+            return next(err);
         }
-        return res.status(400).end()
-    }
-    return next()
-}*/
+    };
+

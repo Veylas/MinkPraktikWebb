@@ -43,26 +43,12 @@ router.get('/contact', function (req, res, next) {
 });
 
 // fleet is rendered
-router.get('/fleet', authController.isUserUser, authController.isUserUser, authController.fleet, (req, res, next) => {
+router.get('/fleet', authController.isUserOrOwner, authController.fleet, (req, res, next) => {
     res.render('fleet')
 });
 
 // The router for vehicle is defined, now it can be used to get information to the page
-router.get('/vehicle/:vehicleID', authController.isUserUser, authController.isUserUser, authController.vehicle, (req, res, next) => {
+router.get('/vehicle/:vehicleID', authController.isUserOrOwner, authController.vehicle, (req, res, next) => {
     res.render('vehicle')
 });
 module.exports = router;
-/*
-function authenticateToken(req, res, next) {
-    // Gather the jwt access token from the request header
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    if (token == null) return res.sendStatus(401) // if there isn't any token
-  
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err: any, user: any) => {
-      console.log(err)
-      if (err) return res.sendStatus(403)
-      req.user = user
-      next() // pass the execution off to whatever request the client intended
-    })
-  }*/
